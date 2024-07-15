@@ -1,16 +1,17 @@
-#! /bin/bash
+#!/usr/bin/bash
 
-set -e	# exit any non-successful executions
-# set -x	# debugging: echo commands as you go
+# SMUGGLE non-sudo users into script
+# run as sudo
+# whoami
+# sudo -i -u bossy bash << EOF
+# echo "In"
+# whoami
+# EOF
+# echo "Out"
+# whoami
 
-# if [[ $(id -u) -ne 0 ]] ; then 
-# 	echo "Please run as root" ; 
-# 	exit 1;
-# fi
+names="bossy elfe"
 
-
-echo "HOME is $HOME"
-
-echo "y/n?"
-read qua
-echo "so $qua then"
+for n in $names; do 
+	echo $n
+done
