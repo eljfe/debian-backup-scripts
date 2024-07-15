@@ -1,78 +1,128 @@
 #! /bin/bash
 
 set -e	# exit any non-successful executions
-set -x	# echo commands as you go
+# set -x	# echo commands as you go
 
+# variables
+dotgrp="dotfile"
+# targetdir="/srv/testdir"
+dotgrpusers="bossy eljfe"
+dotfileowner="bossy:$dotgrp"
+gitrepo=$dotgrp
+targetdir="/srv/$gitrepo/.config"
+zshdir="${targetdir}/zsh"
+vimdir="${targetdir}/vim"
 
-echo "--> you must run `$0` as sudo"
-echo "--> try `sudo -u bossy -H $0`\n\n"
+# =================================
+# sudo script preamble
+# =================================
+
+echo "--> This script needs to be called like so:"
+echo "         'sudo ${0}'"
+echo 
+echo "--> Moreover the following users will be in the dotfile group:"
+echo "         $dotgrpusers      # NOTE they are hardcoded in the script."
+echo 
+source ./proceed-conditional.sh
+
+# =================================
+# group setup
+# =================================
+
+groupadd $dotgrp
+for u in $dotgrpusers
+do
+	usermod --append --groups $dotgrp $u 
+done
+echo "--> $(getent group | grep $dotgrp)"
+
+# =================================
+# git check
+# =================================
+
+echo "--> Review the git settings.  You may need to run 'git-setup.sh'"
+echo "    Furthermore you may need to setup your git SSH key (github-ssh.sh)."
+echo "        $(git config --list)"
+echo 
+source ./proceed-conditional.sh
 
 # =================================
 # shared directory setup
 # =================================
 
-# directory setup
-mkdir -p "/srv/dotfile"
-cd "/srv/dotfile"
+mkdir -p $targetdir
+chown $dotfileowner $targetdir
+chmod 770 $targetdir
 
 # =================================
 # eljfe github D/L
 # =================================
 
-# download from my github
-git clone "https://github.com/eljfe/dotfile.git"
-# the directory isn't called `.config` in the github repoj
-dfdir="/srv/dotfile/.config"
-mv "/srv/dotfile/dotfile" "$dfdir"
+sudo -i -u bossy bash << EOF
+git clone git@github.com:eljfe/$gitrepo.git $targetdir
+EOF
+# tree -L 3 $targetdir
 
 # =================================
-# zsh
+# zsh environment variable
 # =================================
-# create environment variable
-echo 'export ZDOTDIR="${dfdir}/.config/zsh"' >> "/etc/zsh/zshenv"
+
+echo "export ZDOTDIR=\"${zshdir}\"" | tee -a "/etc/zsh/zshenv"
+
+# =================================
+# zsh plugin(s)
+# =================================
 
 # install vi-mode:
-cd "$dfdir/zsh/plugins"
-git clone "https://github.com/jeffreytse/zsh-vi-mode.git"
-
+sudo -i -u bossy bash << EOF
+git clone "https://github.com/jeffreytse/zsh-vi-mode.git" $zshdir"/plugins/zsh-vi-mode"
+EOF
 
 # =================================
-# vim
+# vim colour theme setup
 # =================================
-cd "$dfdir/.config/vim"
 
-# colour theme
-mkdir "colors"
-cd "colors"
+sudo -i -u bossy bash << EOF
+mkdir -p $vimdir"/colors"
 curl -L "https://github.com/mctwynne/sitruuna.vim/raw/master/colors/sitruuna.vim" \
-	-o "sitruuna.vim"
+	-o $vimdir"/colors/sitruuna.vim"
+EOF
 
-# packages
-mkdir -p "$dfdir/pack/packages"
-cd "$dfdir/pack/packages"
+# =================================
+# vim plugin setup
+# =================================
+
+vimpackstart=$vimdir"/pack/packages/start"
+sudo -i -u bossy bash << EOF
+mkdir -p $vimpackstart
 git clone https://github.com/itchyny/lightline.vim \ 
-	"/vim/pack/packages/start/lightline"
+	$vimpackstart"/lightline"
 
 git clone "https://github.com/tpope/vim-commentary.git" \
-	"/vim/pack/packages/start/commentary"
+	$vimpackstart"/commentary"
 
 git clone "https://github.com/tpope/vim-surround.git" \
-	"/vim/pack/packages/start/vim-surround" 
+	$vimpackstart"/vim-surround" 
 
 # git clone "https://github.com/davidhalter/jedi-vim.git" \
 # 	"/vim/pack/packages/start/jedi-vim" 
 
 git clone "https://github.com/dense-analysis/ale.git" \
-	"/vim/pack/packages/start/ale" 
+	$vimpackstart"/ale" 
 
 git clone "https://github.com/ervandew/supertab.git" \
-	"/vim/pack/packages/start/supertab" 
+	$vimpackstart"/supertab" 
 
 git clone "https://github.com/nvie/vim-flake8.git" \
-	"/vim/pack/packages/start/vim-flake8" 
+	$vimpackstart"/vim-flake8" 
 
 git clone "https://github.com/puremourning/vimspector.git" \
-	"/vim/pack/packages/start/vimspector" 
+	$vimpackstart"/vimspector" 
+EOF
+
+# rm -R $targetdir 
+# groupdel $dotgrp
+exit
 
 
 # =================================
