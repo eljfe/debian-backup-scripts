@@ -1,61 +1,57 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 set -e 	# exit if anything goes wrong
 # set -x 	# debugging
 
-# if [[ $(id -u) -ne 0 ]] ; then 
-# 	echo "Please run as root" ; 
-# 	exit 1;
-# fi
+echo "--> This script needs to be called like so:"
+echo "         'sudo ${0}'"
+echo 
+source ./proceed-conditional.sh
 
-fontdir="$HOME/.temp/fonts"
-mkdir -p $fontdir
-cd $fontdir
+homeuser="bossy"
+tempfontdir="/home/${homeuser}/.temp/fonts"
+sysfontdir="/usr/share/fonts"
+ttfontdir=$sysfontdir"/truetype"
 
+cat << EOF
+
+--> This script is hardcoded to install JuliaMono into 
+	the system fonts directory (${sysfontdir}) 
+--> This script is hardcoded to install JuliaMono into
+	the profile of ${homeuser}.  If you want this changed
+	you need to do so by ✋.
+
+
+EOF
+source ./proceed-conditional.sh
+
+sudo -i -u $homeuser bash << EOF
+mkdir -p $tempfontdir
+EOF
 
 # =================================
 # Julia Mono
 # =================================
-# https://stackoverflow.com/a/61374021 
-wget "https://github.com/cormullion/juliamono/releases/download/v0.055/JuliaMono-ttf.tar.gz?raw=true"
-
-# wget filename tidy (get rid of the http junk and the single quotes
-# https://superuser.com/a/1019508
-for i in `find $1 -type f`
-do
-	mv $i `echo $i | cut -d? -f1`
-done
-
-# =================================
-# 
-# =================================
-
+juliazip=$tempfontdir"/JuliaMono-ttf.zip"
+sudo -i -u $homeuser bash << EOF
+wget "https://github.com/cormullion/juliamono/releases/download/v0.056/JuliaMono-ttf.zip" \
+	-P $tempfontdir
+EOF
+unzip $juliazip -d $ttfontdir
+rm $ttfontdir/LICENSE
 
 # =================================
 # update font-manager
 # =================================
-apt -y install fonts-recommended
+
 apt -y install font-manager
 
+exit
 
 
-Hi - Is it possible to somehow download the `fonts-recommended` package and subsequently install them in the directory of my choosing?  
-
-## requirements
-
-1. Install the TTFs locally without installing them system wide (per https://wiki.debian.org/Fonts#Manually)
-2. accomplish this as a non-sudo-er.  
-
-## so far
-As indicated in the subject line, I tried a couple of seemingly reasonable `apt` options:
-
-`apt source fonts-recommended`
-`apt download fonts-recommended`
-
-My assumption - since proved wrong - was that I would be downloading an archive of TTF files. I imagined I could then move them into a directory of my choice.  I now realize neither of these commands actually download anything resembling an archive of font files.
-
-## goals
-1. as stated above, install the fonts in the `fonts-recommended` package locally
-2. as a non-sudoer
-3. Furthermore I wish to have this as a reproducable install script 
-
+# wget filename tidy (get rid of the http junk and the single quotes
+# https://superuser.com/a/1019508
+# for i in `find $1 -type f`
+# do
+# 	mv $i `echo $i | cut -d? -f1`
+# done
