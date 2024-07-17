@@ -95,14 +95,16 @@ EOF
 vimpackstart=$vimdir"/pack/packages/start"
 sudo -i -u bossy bash << EOF
 mkdir -p $vimpackstart
-git clone https://github.com/itchyny/lightline.vim \ 
+git clone "https://github.com/itchyny/lightline.vim" \ 
 	$vimpackstart"/lightline"
 
 git clone "https://github.com/tpope/vim-commentary.git" \
 	$vimpackstart"/commentary"
+vim -u NONE -c 'helptags "${vimpackstart}/commentary/doc" -c q 
 
 git clone "https://github.com/tpope/vim-surround.git" \
 	$vimpackstart"/vim-surround" 
+vim -u NONE -c 'helptags "${vimpackstart}/vim-surround/doc" -c q 
 
 # git clone "https://github.com/davidhalter/jedi-vim.git" \
 # 	"/vim/pack/packages/start/jedi-vim" 
