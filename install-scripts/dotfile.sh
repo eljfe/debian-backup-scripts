@@ -151,8 +151,8 @@ v README.Debian
 # =================================
 # update permissions
 # =================================
-find $dfdir -type d exec chmod -R 775 {} \;
-find $dfdir -type f exec chmod -R 664 {} \;
+find $dfdir -type d exec chmod -R g+x {} \;
+find $dfdir -type f exec chmod -R 0-wx {} \;
 chown -R bossy:dotfile .config
 
 unset dfdir
