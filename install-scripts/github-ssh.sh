@@ -11,16 +11,23 @@ if [[ ! $go =~ $pat ]]; then
 	exit
 fi
 
+sshdir=${HOME}"/.ssh/"
 newkey="github_ed25519"
 scriptdir=$(pwd)
 
 # interactive ssh key generation
 echo "--> making your new key"
-ssh-keygen -t ed25519 -C "jeff@passedpawn.com" -f "${HOME}/.ssh/${newkey}" -N '' <<< $'\ny' >/dev/null 2>&1
+ssh-keygen -t ed25519 -C "jeff@passedpawn.com" -f "${sshdir}${newkey}" -N '' <<< $'\ny' >/dev/null 2>&1
 echo "--> key made"
 echo "--> registering your key"
 eval "$(ssh-agent -s)"
 ssh-add $newkey
+cat << EOF >> ${sshdir}config 
+Host github.com
+	User git
+	IdentityFile ${sshdir}${newkey}
+	IdentitiesOnly yes
+EOF
 cat << EOF
 --> key registered
 
