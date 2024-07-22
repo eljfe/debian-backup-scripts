@@ -1,3 +1,50 @@
+#
+#sudo -i -u $owner bash << EOF
+#git clone https://github.com/itchyny/lightline.vim \
+#	$vimpackstart"/lightline"
+#
+#git clone https://github.com/tpope/vim-commentary.git \
+#	$vimpackstart"/commentary"
+## vim -v -u NONE -tes -c 'helptags "${vimpackstart}/commentary/doc | q'
+#
+#git clone https://github.com/tpope/vim-surround.git \
+#	$vimpackstart"/vim-surround" 
+## vim -u NONE -tes -c 'helptags \"${vimpackstart}/vim-surround/doc\" -c q 
+#
+## git clone "https://github.com/davidhalter/jedi-vim.git" \
+## 	"/vim/pack/packages/start/jedi-vim" 
+#
+## git clone "https://github.com/dense-analysis/ale.git" \
+## 	$vimpackstart"/ale" 
+#
+## git clone --depth=1 https://github.com/ervandew/supertab.git \
+## 	$vimpackstart"/supertab" 
+#
+## git clone "https://github.com/nvie/vim-flake8.git" \
+## 	$vimpackstart"/vim-flake8" 
+#
+## git clone "https://github.com/puremourning/vimspector.git" \
+## 	$vimpackstart"/vimspector" 
+#
+#EOF
+#vim -u NONE -c 'helptags ALL' -c q
+#
+#
+## rm -R $targetdir 
+## groupdel $dotgrp
+#exit
+#
+#
+## =================================
+## update permissions
+## =================================
+#find $dfdir -type d -exec chmod -R g+x {} \;
+#find $dfdir -type f -exec chmod -R 0-wx {} \;
+#
+#unset dfdir
+
+
+
 #! /bin/bash
 
 set -e	# exit any non-successful executions
@@ -6,8 +53,9 @@ set -e	# exit any non-successful executions
 # variables
 dotgrp="dotfile"
 # targetdir="/srv/testdir"
-dotgrpusers="bossy eljfe"
-dotfileowner="bossy:$dotgrp"
+owner=bossy
+dotgrpusers="$owner eljfe"
+dotfileowner="$owner:$dotgrp"
 gitrepo=$dotgrp
 targetdir="/srv/$gitrepo/.config"
 zshdir="${targetdir}/zsh"
@@ -17,12 +65,14 @@ vimdir="${targetdir}/vim"
 # sudo script preamble
 # =================================
 
-echo "--> This script needs to be called like so:"
-echo "         'sudo ${0}'"
-echo 
-echo "--> Moreover the following users will be in the dotfile group:"
-echo "         $dotgrpusers      # NOTE they are hardcoded in the script."
-echo 
+cat << EOF
+--> This script needs to be called like so:
+         'sudo ${0}'
+
+--> Moreover the following users will be in the dotfile group:
+         $dotgrpusers      # NOTE they are hardcoded in the script.
+   ... with the owner being $owner
+EOF
 source ./proceed-conditional.sh
 
 # =================================
@@ -58,7 +108,7 @@ chmod 770 $targetdir
 # eljfe github D/L
 # =================================
 
-sudo -i -u bossy bash << EOF
+sudo -i -u $owner bash << EOF
 git clone git@github.com:eljfe/$gitrepo.git $targetdir
 EOF
 # tree -L 3 $targetdir
@@ -74,7 +124,7 @@ echo "export ZDOTDIR=\"${zshdir}\"" | tee -a "/etc/zsh/zshenv"
 # =================================
 
 # install vi-mode:
-sudo -i -u bossy bash << EOF
+sudo -i -u $owner bash << EOF
 git clone "https://github.com/jeffreytse/zsh-vi-mode.git" $zshdir"/plugins/zsh-vi-mode"
 EOF
 
@@ -82,10 +132,14 @@ EOF
 # vim colour theme setup
 # =================================
 
-sudo -i -u bossy bash << EOF
-mkdir -p $vimdir"/colors"
-curl -L "https://github.com/mctwynne/sitruuna.vim/raw/master/colors/sitruuna.vim" \
-	-o $vimdir"/colors/sitruuna.vim"
+vimcolours=$vimdir"/colors"
+mkdir -p $vimcolours
+chown $dotfileowner $vimcolours
+chmod -R 770 $vimcolours
+sudo -i -u $owner bash << EOF
+sudo -i -u $owner bash << EOF
+curl -L "https://raw.githubusercontent.com/eemed/sitruuna.vim/master/colors/sitruuna.vim" \
+	-o $vimcolours"/sitruuna.vim"
 EOF
 
 # =================================
@@ -93,27 +147,33 @@ EOF
 # =================================
 
 vimpackstart=$vimdir"/pack/packages/start"
-sudo -i -u bossy bash << EOF
 mkdir -p $vimpackstart
-git clone "https://github.com/itchyny/lightline.vim" \ 
+chown $dotfileowner $vimpackstart
+chown -R $dotfileowner $vimdir
+find $vimdir -type d -exec chmod -R g+x {} \;
+
+sudo -i -u $owner bash << EOF
+
+git clone https://github.com/itchyny/lightline.vim \
 	$vimpackstart"/lightline"
 
-git clone "https://github.com/tpope/vim-commentary.git" \
+git clone https://github.com/tpope/vim-commentary.git \
 	$vimpackstart"/commentary"
-vim -u NONE -c 'helptags "${vimpackstart}/commentary/doc" -c q 
+ this doesn't work after too much effort... 😭
+# vim -v -u NONE -tes -c 'helptags "${vimpackstart}/commentary/doc | q'
 
-git clone "https://github.com/tpope/vim-surround.git" \
+git clone https://github.com/tpope/vim-surround.git \
 	$vimpackstart"/vim-surround" 
-vim -u NONE -c 'helptags "${vimpackstart}/vim-surround/doc" -c q 
+# vim -u NONE -tes -c 'helptags \"${vimpackstart}/vim-surround/doc\" -c q 
 
-# git clone "https://github.com/davidhalter/jedi-vim.git" \
-# 	"/vim/pack/packages/start/jedi-vim" 
-
-git clone "https://github.com/dense-analysis/ale.git" \
-	$vimpackstart"/ale" 
-
-git clone "https://github.com/ervandew/supertab.git" \
-	$vimpackstart"/supertab" 
+## git clone "https://github.com/davidhalter/jedi-vim.git" \
+## 	"/vim/pack/packages/start/jedi-vim" 
+#
+## git clone "https://github.com/dense-analysis/ale.git" \
+## 	$vimpackstart"/ale" 
+#
+ git clone --depth=1 https://github.com/ervandew/supertab.git \
+ 	$vimpackstart"/supertab" 
 
 git clone "https://github.com/nvie/vim-flake8.git" \
 	$vimpackstart"/vim-flake8" 
@@ -153,7 +213,7 @@ v README.Debian
 # =================================
 find $dfdir -type d exec chmod -R g+x {} \;
 find $dfdir -type f exec chmod -R 0-wx {} \;
-chown -R bossy:dotfile .config
+chown -R $dotfileowner .config
 
 unset dfdir
 
