@@ -4,12 +4,13 @@ set -e	# exit any non-successful executions
 
 echo "--> This script needs to be called like so:"
 echo "         'sudo -u ${USER} ${0}'"
-read -r -p "... Proceed? (Y/n) ... " go
-pat='y$|Y$|^$'
-if [[ ! $go =~ $pat ]]; then
-	echo "--> bye"
-	exit
-fi
+# read -r -p "... Proceed? (Y/n) ... " go
+# pat='y$|Y$|^$'
+# if [[ ! $go =~ $pat ]]; then
+	# echo "--> bye"
+	# exit
+# fi
+source proceed-conditional.sh
 
 sshdir=${HOME}"/.ssh/"
 newkey="github_ed25519"
