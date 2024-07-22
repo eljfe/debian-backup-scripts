@@ -1,50 +1,3 @@
-#
-#sudo -i -u $owner bash << EOF
-#git clone https://github.com/itchyny/lightline.vim \
-#	$vimpackstart"/lightline"
-#
-#git clone https://github.com/tpope/vim-commentary.git \
-#	$vimpackstart"/commentary"
-## vim -v -u NONE -tes -c 'helptags "${vimpackstart}/commentary/doc | q'
-#
-#git clone https://github.com/tpope/vim-surround.git \
-#	$vimpackstart"/vim-surround" 
-## vim -u NONE -tes -c 'helptags \"${vimpackstart}/vim-surround/doc\" -c q 
-#
-## git clone "https://github.com/davidhalter/jedi-vim.git" \
-## 	"/vim/pack/packages/start/jedi-vim" 
-#
-## git clone "https://github.com/dense-analysis/ale.git" \
-## 	$vimpackstart"/ale" 
-#
-## git clone --depth=1 https://github.com/ervandew/supertab.git \
-## 	$vimpackstart"/supertab" 
-#
-## git clone "https://github.com/nvie/vim-flake8.git" \
-## 	$vimpackstart"/vim-flake8" 
-#
-## git clone "https://github.com/puremourning/vimspector.git" \
-## 	$vimpackstart"/vimspector" 
-#
-#EOF
-#vim -u NONE -c 'helptags ALL' -c q
-#
-#
-## rm -R $targetdir 
-## groupdel $dotgrp
-#exit
-#
-#
-## =================================
-## update permissions
-## =================================
-#find $dfdir -type d -exec chmod -R g+x {} \;
-#find $dfdir -type f -exec chmod -R 0-wx {} \;
-#
-#unset dfdir
-
-
-
 #! /bin/bash
 
 set -e	# exit any non-successful executions
@@ -159,33 +112,31 @@ git clone https://github.com/itchyny/lightline.vim \
 
 git clone https://github.com/tpope/vim-commentary.git \
 	$vimpackstart"/commentary"
- this doesn't work after too much effort... 😭
+# this doesn't work after too much effort... 😭
 # vim -v -u NONE -tes -c 'helptags "${vimpackstart}/commentary/doc | q'
 
 git clone https://github.com/tpope/vim-surround.git \
 	$vimpackstart"/vim-surround" 
-# vim -u NONE -tes -c 'helptags \"${vimpackstart}/vim-surround/doc\" -c q 
 
-## git clone "https://github.com/davidhalter/jedi-vim.git" \
-## 	"/vim/pack/packages/start/jedi-vim" 
-#
-## git clone "https://github.com/dense-analysis/ale.git" \
-## 	$vimpackstart"/ale" 
-#
- git clone --depth=1 https://github.com/ervandew/supertab.git \
+# git clone "https://github.com/davidhalter/jedi-vim.git" \
+# 	"/vim/pack/packages/start/jedi-vim" 
+
+# git clone "https://github.com/dense-analysis/ale.git" \
+# 	$vimpackstart"/ale" 
+
+git clone --depth=1 https://github.com/ervandew/supertab.git \
  	$vimpackstart"/supertab" 
 
 git clone "https://github.com/nvie/vim-flake8.git" \
 	$vimpackstart"/vim-flake8" 
 
-git clone "https://github.com/puremourning/vimspector.git" \
-	$vimpackstart"/vimspector" 
+# git clone "https://github.com/puremourning/vimspector.git" \
+# 	$vimpackstart"/vimspector" 
 EOF
+find $vimdir -name doc -type d -exec vim -c "helptags \{}" -c q \;
 
 # rm -R $targetdir 
 # groupdel $dotgrp
-exit
-
 
 # =================================
 # kitty
@@ -216,4 +167,3 @@ find $dfdir -type f exec chmod -R 0-wx {} \;
 chown -R $dotfileowner .config
 
 unset dfdir
-
