@@ -118,11 +118,11 @@ git clone https://github.com/tpope/vim-commentary.git \
 git clone https://github.com/tpope/vim-surround.git \
 	$vimpackstart"/vim-surround" 
 
-# git clone "https://github.com/davidhalter/jedi-vim.git" \
-# 	"/vim/pack/packages/start/jedi-vim" 
+git clone "https://github.com/davidhalter/jedi-vim.git" \
+	$vimpackstart"/vim/pack/packages/start/jedi-vim" 
 
-# git clone "https://github.com/dense-analysis/ale.git" \
-# 	$vimpackstart"/ale" 
+git clone "https://github.com/dense-analysis/ale.git" \
+	$vimpackstart"/ale" 
 
 git clone --depth=1 https://github.com/ervandew/supertab.git \
  	$vimpackstart"/supertab" 
