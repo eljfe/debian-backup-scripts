@@ -1,0 +1,121 @@
+cd
+apk update
+apk upgrade
+apk --update-cache upgrade
+ll
+alias ll='ls -lAFh'
+ll
+ll /
+ll /srv/
+exit
+cat /etc/group | grep eljfe
+cat /etc/group | grep root
+chmod -r o+w /srv
+chmod o+w /srv -r
+chmod o+w /srv -Rv
+ll /
+alias ll='ls -lAFh'
+ll /
+chmod o+w /srv -Rv
+ll /
+chmod a+r /srv -Rv
+ll /
+which tree
+tree -L 5 /srv
+cd /srv/
+ll
+ll dotfile/
+ll dotfile/.config/
+pwd
+apk add vim git zsh tmux iproute2-ss curl ncurses nmap 
+chmod o-w /srv
+ll /
+echo 'export ZDOTDIR="/srv/dotfile/.config/zsh"'
+echo 'export ZDOTDIR="/srv/dotfile/.config/zsh"' >> /etc/zsh/zshenv 
+tail /etc/zsh/zshenv 
+which chsh
+apk add shadow
+apk search chsh
+apk search shadow
+apk search wget
+arch
+ping wired.com
+whoami
+apk search shadow
+apk add shadow
+vim /etc/passwd
+exit
+cd
+ll
+ls -la
+exit
+infocmp -a xterm-kitty
+exit
+cp -r /home/eljfe/.terminfo ~
+cd
+ls -lA
+exit
+reboot
+v
+vz
+apk add podman
+whoami
+exit
+: 1723303025:0;cd
+: 1723303028:0;apk update
+: 1723303035:0;apk upgrade
+: 1723303040:0;apk list
+: 1723303050:0;apk add podman
+: 1723303081:0;cd /etc/apk/repositories
+: 1723303088:0;v /etc/apk/repositories
+: 1723303097:0;apk add podman
+: 1723303123:0;adduser podster wheel
+: 1723303139:0;grep podster /etc/passwd
+: 1723303271:0;apk add doas
+: 1723303277:0;adduser podster wheel
+: 1723303389:0;adduser
+: 1723303426:0;adduser -s /bin/zsh -G wheel
+: 1723303441:0;adduser -s /bin/zsh -G wheel podster
+: 1723303536:0;permit persist :wheel
+: 1723303569:0;ll /etc/doas.d/
+: 1723303584:0;cat /etc/doas.conf
+: 1723303605:0;v /etc/doas.conf
+: 1723303629:0;su podster 
+: 1723303707:0;infocmp -a xterm-kitty | su podster -c 'tic -x -o /home/podster/.terminfo'
+: 1723303744:0;infocmp -a xterm-kitty 
+: 1723303805:0;infocmp -a xterm-kitty | su podster -c 'tic -x -o /home/podster/.terminfo'
+: 1723303825:0;infocmp -a xterm-kitty | su podster -c "tic -x -o /home/podster/.terminfo"
+: 1723303924:0;cp -r /home/eljfe/.terminfo /home/podster/.terminfo 
+: 1723303947:0;chown podster:podster /home/podster/.terminfo
+: 1723303965:0;grep podster /etc/passwd
+: 1723303991:0;ll /home/podster
+: 1723304005:0;ll /home/eljfe
+: 1723304015:0;grep eljfe /etc/passwd
+: 1723304032:0;v /etc/passwd
+: 1723304059:0;chown podster:podster /home/podster/.terminfo
+: 1723304074:0;su podster
+: 1723304142:0;cat /etc/group
+: 1723304164:0;addgroup
+: 1723304181:0;addgroup podster podster
+: 1723304197:0;addgroup podster
+: 1723304203:0;addgroup podster podster
+: 1723304222:0;addgroup dotfile
+: 1723304227:0;addgroup dotfile eljfe
+: 1723304244:0;addgroup eljfe dotfile 
+: 1723304250:0;addgroup podster dotfile 
+: 1723304275:0;chown podster:podster /home/podster/.terminfo
+: 1723304303:0;chown -R :dotfile /srv/dotfile
+: 1723304310:0;ll $DOTFILES
+: 1723304316:0;su podster
+: 1723304930:0;v /etc/rc.conf
+: 1723304976:0;rc-update add cgroups && rc-service cgroups start
+: 1723304991:0;modprobe tun
+: 1723305007:0;echo tun >> /etc/modules
+: 1723305056:0;echo podman:100000:65536 > /etc/subuid
+: 1723305065:0;echo podman:100000:65536 > /etc/subgid
+: 1723305091:0;echo "ip_tables" >> /etc/modules
+: 1723305104:0;modprobe ip_tables
+: 1723305118:0;podman --rm hello-world
+: 1723305128:0;podman run --rm hello-world
+: 1723307413:0;cat .*history
+: 1723307435:0;cat .*history > setup.history
