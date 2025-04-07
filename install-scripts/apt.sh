@@ -5,6 +5,7 @@ set -e	# exit any non-successful executions
 echo "--> This script needs to be called like so:"
 echo "         'sudo ${USER} ${0}'"
 source proceed-conditional.sh
+$(proceed)
 
 echo "--> updating... upgrading"
 apt update

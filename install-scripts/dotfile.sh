@@ -27,6 +27,7 @@ cat << EOF
    ... with the owner being $owner
 EOF
 source ./proceed-conditional.sh
+$(proceed)
 
 # =================================
 # group setup
@@ -48,6 +49,7 @@ echo "    Furthermore you may need to setup your git SSH key (github-ssh.sh)."
 echo "        $(git config --list)"
 echo 
 source ./proceed-conditional.sh
+$(proceed)
 
 # =================================
 # shared directory setup

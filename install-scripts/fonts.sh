@@ -7,6 +7,7 @@ echo "--> This script needs to be called like so:"
 echo "         'sudo ${0}'"
 echo 
 source ./proceed-conditional.sh
+$(proceed)
 
 homeuser="bossy"
 tempfontdir="/home/${homeuser}/.temp/fonts"
@@ -24,6 +25,7 @@ cat << EOF
 
 EOF
 source ./proceed-conditional.sh
+$(proceed)
 
 sudo -i -u $homeuser bash << EOF
 mkdir -p $tempfontdir
